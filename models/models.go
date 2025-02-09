@@ -17,6 +17,7 @@ type Model struct {
 	ID         int `gorm:"primary_key" json:"id" `            // 主键 ID
 	CreatedOn  int `json:"created_on" gorm:"autoCreateTime"`  // 创建时间
 	ModifiedOn int `json:"modified_on" gorm:"autoUpdateTime"` // 修改时间
+	DeletedOn  int `json:"delete_on" gorm:"softDelete"`
 }
 
 // init 函数在包被导入时自动执行，用于初始化数据库连接
