@@ -41,19 +41,19 @@ const docTemplate = `{
                     "200": {
                         "description": "返回文章信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "文章不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -90,7 +90,7 @@ const docTemplate = `{
                     "200": {
                         "description": "返回标签列表和总数",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -132,19 +132,50 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "409": {
                         "description": "标签已存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tags/import": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Import Image",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Image File",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -195,19 +226,19 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "标签不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -237,19 +268,19 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "标签不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -286,19 +317,19 @@ const docTemplate = `{
                     "200": {
                         "description": "返回文章列表和总数",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -362,25 +393,25 @@ const docTemplate = `{
                     "200": {
                         "description": "成功返回数据",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "标签不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -449,25 +480,25 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "文章不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -497,25 +528,25 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "404": {
                         "description": "文章不存在",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -554,25 +585,25 @@ const docTemplate = `{
                     "200": {
                         "description": "返回成功信息，包含 Token",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "400": {
                         "description": "参数验证失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "401": {
                         "description": "认证失败，用户名或密码错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
                         "description": "服务器错误",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -580,7 +611,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Response": {
+        "app.Response": {
             "type": "object",
             "properties": {
                 "code": {

@@ -1,5 +1,5 @@
 definitions:
-  models.Response:
+  app.Response:
     properties:
       code:
         type: integer
@@ -27,15 +27,15 @@ paths:
         "200":
           description: 返回文章信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 文章不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 获取单篇文章的详细信息
       tags:
       - 文章
@@ -59,7 +59,7 @@ paths:
         "200":
           description: 返回标签列表和总数
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 获取标签列表
       tags:
       - 标签
@@ -87,15 +87,15 @@ paths:
         "200":
           description: 返回成功信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "409":
           description: 标签已存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 新增文章标签
       tags:
       - 标签
@@ -116,15 +116,15 @@ paths:
         "200":
           description: 返回成功信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 标签不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 删除文章标签
       tags:
       - 标签
@@ -157,18 +157,38 @@ paths:
         "200":
           description: 返回成功信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 标签不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 修改文章标签
       tags:
       - 标签
+  /api/v1/tags/import:
+    post:
+      parameters:
+      - description: Image File
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: Import Image
   /articles:
     get:
       consumes:
@@ -189,15 +209,15 @@ paths:
         "200":
           description: 返回文章列表和总数
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 获取文章列表
       tags:
       - 文章
@@ -241,19 +261,19 @@ paths:
         "200":
           description: 成功返回数据
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 标签不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 新增一篇文章
       tags:
       - 文章
@@ -274,19 +294,19 @@ paths:
         "200":
           description: 返回成功信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 文章不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 删除文章
       tags:
       - 文章
@@ -331,19 +351,19 @@ paths:
         "200":
           description: 返回成功信息
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "404":
           description: 文章不存在
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 修改文章
       tags:
       - 文章
@@ -369,19 +389,19 @@ paths:
         "200":
           description: 返回成功信息，包含 Token
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "400":
           description: 参数验证失败
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "401":
           description: 认证失败，用户名或密码错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/models.Response'
+            $ref: '#/definitions/app.Response'
       summary: 获取授权 Token
       tags:
       - 认证
