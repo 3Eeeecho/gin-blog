@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/3Eeeecho/go-gin-example/models"
+	"github.com/3Eeeecho/go-gin-example/pkg/app"
 	"github.com/3Eeeecho/go-gin-example/pkg/e"
 	"github.com/3Eeeecho/go-gin-example/pkg/logging"
 	"github.com/3Eeeecho/go-gin-example/pkg/util"
@@ -24,15 +25,16 @@ type auth struct {
 // @Produce json
 // @Param username query string true "用户名"  // 用户名，必填
 // @Param password query string true "密码"  // 密码，必填
-// @Success 200 {object} models.Response "返回成功信息，包含 Token"
-// @Failure 400 {object} models.Response "参数验证失败"
-// @Failure 401 {object} models.Response "认证失败，用户名或密码错误"
-// @Failure 500 {object} models.Response "服务器错误"
+// @Success 200 {object} app.Response "返回成功信息，包含 Token"
+// @Failure 400 {object} app.Response "参数验证失败"
+// @Failure 401 {object} app.Response "认证失败，用户名或密码错误"
+// @Failure 500 {object} app.Response "服务器错误"
 // @Router /auth [get]
 func GetAuth(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
+	g := app.Gin{C: c}
 	valid := validation.Validation{}
 	a := auth{Username: username, Password: password}
 	ok, _ := valid.Valid(&a)
@@ -57,7 +59,5 @@ func GetAuth(c *gin.Context) {
 			logging.Info(err.Key, err.Message)
 		}
 	}
-
-	response := models.NewResponse(code, e.GetMsg(code), data)
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, code, data)
 }

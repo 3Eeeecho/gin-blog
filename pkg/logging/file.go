@@ -3,7 +3,6 @@ package logging
 import (
 	"fmt"
 	"os"
-	"path"
 	"time"
 
 	"github.com/3Eeeecho/go-gin-example/pkg/file"
@@ -28,7 +27,8 @@ func openLogFile(filePath, fileName string) (*os.File, error) {
 		return nil, fmt.Errorf("os.Getwd err: %v", err)
 	}
 
-	src := path.Join(dir, filePath)
+	src := dir + "/" + filePath
+	fmt.Println(src)
 	perm := file.CheckFilePermission(src)
 	//没有权限，返回错误
 	if perm {
@@ -42,7 +42,7 @@ func openLogFile(filePath, fileName string) (*os.File, error) {
 
 	f, err := file.Open(src+fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return nil, fmt.Errorf("Fail to OpenFile :%v", err)
+		return nil, fmt.Errorf("fail to openfile :%v", err)
 	}
 
 	return f, nil

@@ -3,14 +3,21 @@ package api
 import (
 	"net/http"
 
-	"github.com/3Eeeecho/go-gin-example/models"
+	"github.com/3Eeeecho/go-gin-example/pkg/app"
 	"github.com/3Eeeecho/go-gin-example/pkg/e"
 	"github.com/3Eeeecho/go-gin-example/pkg/logging"
 	"github.com/3Eeeecho/go-gin-example/pkg/upload"
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Import Image
+// @Produce  json
+// @Param image formData file true "Image File"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/tags/import [post]
 func UpLoadImage(c *gin.Context) {
+	g := app.Gin{C: c}
 	code := e.SUCCESS
 	data := make(map[string]string)
 
@@ -18,8 +25,7 @@ func UpLoadImage(c *gin.Context) {
 	if err != nil {
 		logging.Warn(err)
 		code = e.ERROR
-		response := models.NewResponse(code, e.GetMsg(code), data)
-		c.JSON(http.StatusOK, response)
+		g.Response(http.StatusOK, code, data)
 	}
 
 	if image == nil {
@@ -46,6 +52,5 @@ func UpLoadImage(c *gin.Context) {
 			}
 		}
 	}
-	response := models.NewResponse(code, e.GetMsg(code), data)
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, code, data)
 }

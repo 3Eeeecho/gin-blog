@@ -1,0 +1,2 @@
+# github.com/3Eeeecho/go-gin-example/routers/api/v1
+routers/api/v1/article.go:124:2: declared and not used: cover_image_url

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/3Eeeecho/go-gin-example/models"
+	"github.com/3Eeeecho/go-gin-example/pkg/app"
 	"github.com/3Eeeecho/go-gin-example/pkg/e"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/3Eeeecho/go-gin-example/pkg/util"
@@ -20,9 +21,10 @@ import (
 // @Produce json
 // @Param name query string false "标签名称"  // 可选参数，按标签名称进行过滤
 // @Param state query int false "标签状态"  // 可选参数，按状态过滤，0: 禁用，1: 启用
-// @Success 200 {object} models.Response "返回标签列表和总数"
+// @Success 200 {object} app.Response "返回标签列表和总数"
 // @Router /api/v1/tags [get]
 func GetTags(c *gin.Context) {
+	g := app.Gin{C: c}
 	name := c.Query("name")
 	state := -1
 	if arg := c.Query("state"); arg != "" {
@@ -44,8 +46,7 @@ func GetTags(c *gin.Context) {
 	data["lists"] = lists
 	data["total"] = total
 
-	response := models.Success(data)
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, e.SUCCESS, nil)
 }
 
 // AddTag 新增文章标签
@@ -57,15 +58,16 @@ func GetTags(c *gin.Context) {
 // @Param name query string true "标签名称"  // 必填参数，标签名称
 // @Param state query int false "标签状态"  // 可选参数，0: 禁用，1: 启用
 // @Param created_by query int false "创建人"  // 可选参数，创建人的用户名
-// @Success 200 {object} models.Response "返回成功信息"
-// @Failure 400 {object} models.Response "参数验证失败"
-// @Failure 409 {object} models.Response "标签已存在"
+// @Success 200 {object} app.Response "返回成功信息"
+// @Failure 400 {object} app.Response "参数验证失败"
+// @Failure 409 {object} app.Response "标签已存在"
 // @Router /api/v1/tags [post]
 func AddTag(c *gin.Context) {
 	name := c.Query("name")
 	state := com.StrTo(c.DefaultQuery("state", "0")).MustInt()
 	createdBy := c.Query("created_by")
 
+	g := app.Gin{C: c}
 	valid := validation.Validation{}
 	valid.Required(name, "name").Message("消息不能为空")
 	valid.MaxSize(name, 100, "name").Message("名称最长为100个字符")
@@ -82,8 +84,7 @@ func AddTag(c *gin.Context) {
 			code = e.ERROR_EXIST_TAG
 		}
 	}
-	response := models.NewResponse(code, e.GetMsg(code), make(map[string]string))
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, code, nil)
 }
 
 // EditTag 修改文章标签
@@ -96,15 +97,16 @@ func AddTag(c *gin.Context) {
 // @Param name query string false "标签名称"  // 可选参数，标签名称
 // @Param state query int false "标签状态"  // 可选参数，0: 禁用，1: 启用
 // @Param modified_by query string true "修改人"  // 必填参数，修改人
-// @Success 200 {object} models.Response "返回成功信息"
-// @Failure 400 {object} models.Response "参数验证失败"
-// @Failure 404 {object} models.Response "标签不存在"
+// @Success 200 {object} app.Response "返回成功信息"
+// @Failure 400 {object} app.Response "参数验证失败"
+// @Failure 404 {object} app.Response "标签不存在"
 // @Router /api/v1/tags/{id} [put]
 func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	name := c.Query("name")
 	modifiedBy := c.Query("modified_by")
 
+	g := app.Gin{C: c}
 	valid := validation.Validation{}
 
 	var state int = -1
@@ -137,8 +139,7 @@ func EditTag(c *gin.Context) {
 		}
 	}
 
-	response := models.NewResponse(code, e.GetMsg(code), make(map[string]string))
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, code, nil)
 }
 
 // DeleteTag 删除文章标签
@@ -148,13 +149,14 @@ func EditTag(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param id path int true "标签ID"  // 必填参数，标签ID
-// @Success 200 {object} models.Response "返回成功信息"
-// @Failure 400 {object} models.Response "参数验证失败"
-// @Failure 404 {object} models.Response "标签不存在"
+// @Success 200 {object} app.Response "返回成功信息"
+// @Failure 400 {object} app.Response "参数验证失败"
+// @Failure 404 {object} app.Response "标签不存在"
 // @Router /api/v1/tags/{id} [delete]
 func DeleteTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 
+	g := app.Gin{C: c}
 	valid := validation.Validation{}
 	valid.Required(id, "id").Message("ID不能为空")
 
@@ -167,6 +169,5 @@ func DeleteTag(c *gin.Context) {
 			code = e.ERROR_NOT_EXIST_TAG
 		}
 	}
-	response := models.NewResponse(code, e.GetMsg(code), make(map[string]string))
-	c.JSON(http.StatusOK, response)
+	g.Response(http.StatusOK, code, nil)
 }

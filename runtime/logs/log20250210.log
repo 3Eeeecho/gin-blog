@@ -1,0 +1,4 @@
+[INFO][models.go:45]2025/02/10 20:15:46 Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+[INFO][models.go:45]2025/02/10 20:16:14 Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+[INFO][models.go:45]2025/02/10 20:20:31 Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+[INFO][models.go:45]2025/02/10 20:24:22 Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)

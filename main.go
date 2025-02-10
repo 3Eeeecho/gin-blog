@@ -13,8 +13,8 @@ import (
 
 func main() {
 	setting.SetUp()
-	models.SetUp()
 	logging.SetUp()
+	models.SetUp()
 
 	router := routers.InitRouter()
 
