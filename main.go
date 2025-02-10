@@ -36,5 +36,8 @@ func main() {
 		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
-	s.ListenAndServe()
+
+	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		logging.Fatal(fmt.Sprintf("Failed to start server: %v", err))
+	}
 }

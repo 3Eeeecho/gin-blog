@@ -29,9 +29,13 @@ var (
 )
 
 func SetUp() {
-	filepath := getLogFileFullPath()
-	F = openLogFile(filepath)
 
+	filepath := getLogFilePath()
+	fileName := getLogFileName()
+	F, err := openLogFile(filepath, fileName)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }
 
