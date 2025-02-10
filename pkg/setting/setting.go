@@ -7,73 +7,68 @@ import (
 	"github.com/go-ini/ini"
 )
 
-var (
-	Cfg *ini.File
-
-	RunMode string
-
-	HTTPPort     int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
-
+type App struct {
 	PageSize  int
 	JwtSecret string
-)
 
-func init() {
-	var err error
-	Cfg, err = ini.Load("conf/app.ini")
+	RuntimeRootPath string
+
+	ImagePrefixUrl string
+	ImageSavePath  string
+	ImageMaxSize   int
+	ImageAllowExts []string
+
+	LogSavePath string
+	LogSaveName string
+	LogFileExt  string
+	TimeFormat  string
+}
+
+var AppSetting = &App{}
+
+type Server struct {
+	RunMode      string
+	HttpPort     int
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
+}
+
+var ServerSetting = &Server{}
+
+type Database struct {
+	Type        string
+	User        string
+	Password    string
+	Host        string
+	Name        string
+	TablePrefix string
+}
+
+var DatabaseSetting = &Database{}
+
+func SetUp() {
+	Cfg, err := ini.Load("conf/app.ini")
 	if err != nil {
 		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
 	}
-	LoadBase()
-	LoadServer()
-	LoadApp()
-}
 
-// LoadBase 加载基础配置
-func LoadBase() {
-	// 从默认节（无节名部分）中获取 RUN_MODE 配置项
-	// 如果不存在或为空，则使用默认值 "debug"
-	RunMode = Cfg.Section("").Key("RunMode").MustString("debug")
-}
-
-// LoadServer 加载服务器相关配置
-func LoadServer() {
-	// 获取名为 "server" 的配置节
-	sec, err := Cfg.GetSection("server")
+	err = Cfg.Section("app").MapTo(AppSetting)
 	if err != nil {
-		// 如果获取失败，记录错误并退出程序
-		log.Fatalf("Fail to get section 'server': %v", err)
+		log.Fatalf("Cfg.MapTo AppSetting err: %v", err)
 	}
 
-	// 从 server 节中获取 HTTP_PORT 配置项
-	// 如果不存在或为空，则使用默认值 8000
-	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
+	AppSetting.ImageMaxSize = AppSetting.ImageMaxSize * 1024 * 1024
 
-	// 从 server 节中获取 READ_TIMEOUT 配置项
-	// 如果不存在或为空，则使用默认值 60，并将其转换为 time.Duration 类型（单位为秒）
-	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
-
-	// 从 server 节中获取 WRITE_TIMEOUT 配置项
-	// 如果不存在或为空，则使用默认值 60，并将其转换为 time.Duration 类型（单位为秒）
-	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
-}
-
-// LoadApp 加载应用程序相关配置
-func LoadApp() {
-	// 获取名为 "app" 的配置节
-	sec, err := Cfg.GetSection("app")
+	err = Cfg.Section("server").MapTo(ServerSetting)
 	if err != nil {
-		// 如果获取失败，记录错误并退出程序
-		log.Fatalf("Fail to get section 'app': %v", err)
+		log.Fatalf("Cfg.MapTo ServerSetting err: %v", err)
 	}
 
-	// 从 app 节中获取 JWT_SECRET 配置项
-	// 如果不存在或为空，则使用默认值 "!@)*#)!@U#@*!@!)"
-	JwtSecret = sec.Key("JWT_SECRET").MustString("!@)*#)!@U#@*!@!)")
+	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
+	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 
-	// 从 app 节中获取 PAGE_SIZE 配置项
-	// 如果不存在或为空，则使用默认值 10
-	PageSize = sec.Key("PAGE_SIZE").MustInt(10)
+	err = Cfg.Section("database").MapTo(DatabaseSetting)
+	if err != nil {
+		log.Fatalf("Cfg.MapTo DatabaseSetting err: %v", err)
+	}
 }

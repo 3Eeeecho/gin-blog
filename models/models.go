@@ -20,26 +20,19 @@ type Model struct {
 	DeletedOn  int `json:"delete_on" gorm:"softDelete"`
 }
 
-// init 函数在包被导入时自动执行，用于初始化数据库连接
-func init() {
+func SetUp() {
 	var (
 		err                                               error
 		dbType, dbName, user, password, host, tablePrefix string
 	)
 
-	// 从配置文件中获取数据库相关的配置项
-	sec, err := setting.Cfg.GetSection("database")
-	if err != nil {
-		logging.Fatal(fmt.Sprintf("Fail to get section 'database': %v", err))
-	}
-
 	// 读取数据库配置
-	dbType = sec.Key("TYPE").String()              // 数据库类型（如 mysql）
-	dbName = sec.Key("NAME").String()              // 数据库名称
-	user = sec.Key("USER").String()                // 数据库用户名
-	password = sec.Key("PASSWORD").String()        // 数据库密码
-	host = sec.Key("HOST").String()                // 数据库主机地址
-	tablePrefix = sec.Key("TABLE_PREFIX").String() // 表前缀
+	dbType = setting.DatabaseSetting.Type             // 数据库类型（如 mysql）
+	dbName = setting.DatabaseSetting.Name             // 数据库名称
+	user = setting.DatabaseSetting.User               // 数据库用户名
+	password = setting.DatabaseSetting.Password       // 数据库密码
+	host = setting.DatabaseSetting.Host               // 数据库主机地址
+	tablePrefix = setting.DatabaseSetting.TablePrefix // 表前缀
 
 	// 使用 GORM 打开数据库连接
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",

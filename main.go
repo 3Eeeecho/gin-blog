@@ -12,6 +12,10 @@ import (
 )
 
 func main() {
+	setting.SetUp()
+	models.SetUp()
+	logging.SetUp()
+
 	router := routers.InitRouter()
 
 	c := cron.New()
@@ -26,10 +30,10 @@ func main() {
 	c.Start()
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
+		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
 		Handler:        router,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
+		ReadTimeout:    setting.ServerSetting.ReadTimeout,
+		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 	s.ListenAndServe()

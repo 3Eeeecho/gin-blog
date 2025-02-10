@@ -5,13 +5,15 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 )
 
 var (
-	LogSavePath = "runtime/logs/"
-	LogSaveName = "log"
-	LogFileExt  = "log"
-	TimeFormat  = "20060101"
+	LogSavePath = setting.AppSetting.LogSavePath
+	LogSaveName = setting.AppSetting.LogSaveName
+	LogFileExt  = setting.AppSetting.LogFileExt
+	TimeFormat  = setting.AppSetting.TimeFormat
 )
 
 func getLogFilePath() string {
