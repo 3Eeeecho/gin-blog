@@ -18,7 +18,7 @@ func GetPage(c *gin.Context) int {
 	// 如果 page 大于 0，则计算偏移量
 	// 偏移量的计算公式为：(page - 1) * 每页显示的条数
 	if page > 0 {
-		result = (page - 1) * setting.PageSize
+		result = (page - 1) * setting.AppSetting.PageSize
 	}
 
 	// 返回计算后的偏移量
