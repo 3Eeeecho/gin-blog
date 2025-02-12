@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/3Eeeecho/go-gin-example/models"
@@ -35,18 +34,15 @@ func GetArticle(c *gin.Context) {
 
 	code := e.INVALID_PARAMS
 	var data interface{}
-	if !valid.HasErrors() {
-		if models.ExistArticleByID(id) {
-			code = e.SUCCESS
-			data = models.GetArticle(id)
-		} else {
-			code = e.ERROR_NOT_EXIST_ARTICLE
-		}
-	} else {
-		for _, err := range valid.Errors {
-			fmt.Println("Logging error:", err.Key, err.Message) // 调试信息
-			logging.Info(err.Key, err.Message)
-		}
+
+	if valid.HasErrors() {
+		app.MakrErrors(valid.Errors)
+		g.Response(http.StatusOK, code, nil)
+		return
+	}
+
+	if !models.ExistArticleByID(id) {
+
 	}
 
 	g.Response(http.StatusOK, code, data)
