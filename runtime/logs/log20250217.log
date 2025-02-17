@@ -1,0 +1,12 @@
+[INFO][tag_service.go:97]2025/02/17 16:07:43 Generated query conditions: map[deleted_on:0]
+[INFO][tag_service.go:97]2025/02/17 16:07:43 Generated query conditions: map[deleted_on:0]
+[INFO][tag_service.go:97]2025/02/17 16:08:05 Generated query conditions: map[deleted_on:0 name:1]
+[INFO][tag_service.go:97]2025/02/17 16:08:05 Generated query conditions: map[deleted_on:0 name:1]
+[INFO][tag.go:107]2025/02/17 16:08:34 <nil>
+[INFO][request.go:10]2025/02/17 16:10:12 Name.Required. Name Can not be empty
+[INFO][request.go:10]2025/02/17 16:10:12 CreatedBy.Required. CreatedBy Can not be empty
+[INFO][tag.go:88]2025/02/17 16:10:12 400
+[INFO][tag_service.go:97]2025/02/17 16:10:14 Generated query conditions: map[deleted_on:0]
+[INFO][tag_service.go:97]2025/02/17 16:10:14 Generated query conditions: map[deleted_on:0]
+[INFO][tag_service.go:97]2025/02/17 16:12:38 Generated query conditions: map[deleted_on:0]
+[INFO][tag_service.go:97]2025/02/17 16:12:38 Generated query conditions: map[deleted_on:0]

@@ -83,13 +83,12 @@ func AddArticle(data map[string]interface{}) error {
 	return nil
 }
 
-func DeleteArticle(id int) (bool, error) {
-	var article Article
-	err := db.Where("id = ?", id).Delete(&article).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+func DeleteArticle(id int) error {
+	if err := db.Where("id = ?", id).Delete(Article{}).Error; err != nil {
+		return err
 	}
-	return article.ID > 0, nil
+
+	return nil
 }
 
 func CleanAllArticle() error {

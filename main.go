@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/3Eeeecho/go-gin-example/models"
+	"github.com/3Eeeecho/go-gin-example/pkg/gredis"
 	"github.com/3Eeeecho/go-gin-example/pkg/logging"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/3Eeeecho/go-gin-example/routers"
@@ -15,6 +16,7 @@ func main() {
 	setting.SetUp()
 	logging.SetUp()
 	models.SetUp()
+	gredis.SetUp()
 
 	router := routers.InitRouter()
 

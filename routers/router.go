@@ -2,7 +2,6 @@ package routers
 
 import (
 	_ "github.com/3Eeeecho/go-gin-example/docs"
-	"github.com/3Eeeecho/go-gin-example/middleware/jwt"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/3Eeeecho/go-gin-example/pkg/upload"
 	"github.com/3Eeeecho/go-gin-example/routers/api"
@@ -29,7 +28,7 @@ func InitRouter() *gin.Engine {
 	r.POST("/upload", api.UpLoadImage)
 
 	apiv1 := r.Group("/api/v1")
-	apiv1.Use(jwt.JWT())
+	//apiv1.Use(jwt.JWT())
 	{
 		//获取标签列表
 		apiv1.GET("/tags", v1.GetTags)

@@ -146,7 +146,7 @@ func (a *Article) GetMaps() map[string]interface{} {
 	return maps
 }
 
-func (a *Article) Delete() (bool, error) {
+func (a *Article) Delete() error {
 	return models.DeleteArticle(a.ID)
 }
 
