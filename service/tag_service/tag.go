@@ -173,7 +173,18 @@ func (t *Tag) Import(r io.Reader) error {
 			if len(data) < 3 {
 				return fmt.Errorf("excel 行数据不完整: %v", data)
 			}
-			models.AddTag(data[1], 1, data[2])
+			//去除导入重复tag
+			name := data[1]
+			exist, err := models.ExistTagByName(name)
+			if err != nil {
+				return err
+			}
+
+			if exist {
+				continue
+			}
+
+			models.AddTag(name, 1, data[2])
 		}
 	}
 
