@@ -5,6 +5,7 @@ import (
 
 	"github.com/3Eeeecho/go-gin-example/pkg/app"
 	"github.com/3Eeeecho/go-gin-example/pkg/e"
+	"github.com/3Eeeecho/go-gin-example/pkg/export"
 	"github.com/3Eeeecho/go-gin-example/pkg/logging"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/3Eeeecho/go-gin-example/pkg/util"
@@ -213,6 +214,67 @@ func DeleteTag(c *gin.Context) {
 	err = tagService.Delete()
 	if err != nil {
 		g.Response(http.StatusInternalServerError, e.ERROR_DELETE_TAG_FAIL, nil)
+		return
+	}
+
+	g.Response(http.StatusOK, e.SUCCESS, nil)
+}
+
+// ExportTag 导出标签数据
+// @Summary 导出标签信息
+// @Description 生成 Excel 文件并返回下载地址
+// @Tags 标签管理
+// @Accept application/x-www-form-urlencoded
+// @Produce json
+// @Param name formData string false "标签名称（可选）"
+// @Param state formData int false "标签状态（可选），1=启用，0=禁用"
+// @Success 200 {object} map[string]string "导出成功"
+// @Failure 500 {object} app.Response "导出失败"
+// @Router /api/tags/export [post]
+func ExportTag(c *gin.Context) {
+	g := app.Gin{C: c}
+	name := c.PostForm("name")
+
+	state := -1
+	if arg := c.PostForm("state"); arg != "" {
+		if state != -1 {
+			state = com.StrTo(arg).MustInt()
+		}
+	}
+
+	tagService := tag_service.Tag{
+		Name:  name,
+		State: state,
+	}
+
+	filename, err := tagService.Export()
+	if err != nil {
+		logging.Info(err)
+		g.Response(http.StatusInternalServerError, e.ERROR_EXPORT_TAG_FAIL, nil)
+		return
+	}
+
+	g.Response(http.StatusOK, e.SUCCESS, map[string]string{
+		"export_url":      export.GetExcelFullUrl(filename),
+		"export_save_url": export.GetExcelPath() + filename,
+	})
+}
+
+func ImportTag(c *gin.Context) {
+	g := app.Gin{C: c}
+
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		logging.Warn(err)
+		g.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
+	}
+
+	tagService := tag_service.Tag{}
+	err = tagService.Import(file)
+	if err != nil {
+		logging.Warn(err)
+		g.Response(http.StatusInternalServerError, e.ERROR_IMPORT_TAG_FAIL, nil)
 		return
 	}
 

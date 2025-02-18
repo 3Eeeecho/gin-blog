@@ -17,7 +17,7 @@ import (
 // name: 图片文件名
 // 返回: 完整的图片 URL，格式为 "ImagePrefixUrl/ImageSavePath/name"
 func GetImageFullUrl(name string) string {
-	return setting.AppSetting.ImagePrefixUrl + "/" + GetImagePath() + name
+	return setting.AppSetting.PrefixUrl + "/" + GetImagePath() + name
 }
 
 // GetImageName 生成唯一的图片文件名

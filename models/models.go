@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/3Eeeecho/go-gin-example/pkg/logging"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
@@ -14,9 +15,9 @@ var db *gorm.DB
 
 // Model 是一个基础模型，包含所有模型共有的字段
 type Model struct {
-	ID         int `gorm:"primary_key" json:"id" `            // 主键 ID
-	CreatedOn  int `json:"created_on" gorm:"autoCreateTime"`  // 创建时间
-	ModifiedOn int `json:"modified_on" gorm:"autoUpdateTime"` // 修改时间
+	ID         int `gorm:"primary_key" json:"id" ` // 主键 ID
+	CreatedOn  int `json:"created_on" `            // 创建时间
+	ModifiedOn int `json:"modified_on" `           // 修改时间
 	DeletedOn  int `json:"delete_on" gorm:"softDelete"`
 }
 
@@ -51,6 +52,9 @@ func SetUp() {
 		return tablePrefix + defaultTableName
 	}
 
+	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+
 	// 设置 GORM 使用单数表名（默认情况下，GORM 会将结构体名称转换为复数形式作为表名）
 	db.SingularTable(true)
 
@@ -67,4 +71,29 @@ func SetUp() {
 // CloseDB 关闭数据库连接
 func CloseDB() {
 	defer db.Close()
+}
+
+// updateTimeStampForCreateCallback will set `CreatedOn`, `ModifiedOn` when creating
+func updateTimeStampForCreateCallback(scope *gorm.Scope) {
+	if !scope.HasError() {
+		nowTime := time.Now().Unix()
+		if createTimeField, ok := scope.FieldByName("CreatedOn"); ok {
+			if createTimeField.IsBlank {
+				createTimeField.Set(nowTime)
+			}
+		}
+
+		if modifyTimeField, ok := scope.FieldByName("ModifiedOn"); ok {
+			if modifyTimeField.IsBlank {
+				modifyTimeField.Set(nowTime)
+			}
+		}
+	}
+}
+
+// updateTimeStampForUpdateCallback will set `ModifiedOn` when updating
+func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
+	if _, ok := scope.Get("gorm:update_column"); !ok {
+		scope.SetColumn("ModifiedOn", time.Now().Unix())
+	}
 }
