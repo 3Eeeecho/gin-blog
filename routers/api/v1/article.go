@@ -5,11 +5,13 @@ import (
 
 	"github.com/3Eeeecho/go-gin-example/pkg/app"
 	"github.com/3Eeeecho/go-gin-example/pkg/e"
+	"github.com/3Eeeecho/go-gin-example/pkg/qrcode"
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/3Eeeecho/go-gin-example/pkg/util"
 	"github.com/3Eeeecho/go-gin-example/service/article_service"
 	"github.com/3Eeeecho/go-gin-example/service/tag_service"
 	"github.com/astaxie/beego/validation"
+	"github.com/boombuler/barcode/qr"
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
 )
@@ -309,6 +311,24 @@ func DeleteArticle(c *gin.Context) {
 	err = articleService.Delete()
 	if err != nil {
 		g.Response(http.StatusInternalServerError, e.ERROR_DELETE_ARTICLE_FAIL, nil)
+		return
+	}
+
+	g.Response(http.StatusOK, e.SUCCESS, nil)
+}
+
+const (
+	QRCODE_URL = "https://github.com/3Eeeecho/gin-blog"
+)
+
+func GenerateArticlePoster(c *gin.Context) {
+	g := app.Gin{C: c}
+	qrc := qrcode.NewQrCode(QRCODE_URL, 300, 300, qr.M, qr.Auto)
+	path := qrcode.GetQrCodePath()
+
+	_, _, err := qrc.Encode(path)
+	if err != nil {
+		g.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}
 

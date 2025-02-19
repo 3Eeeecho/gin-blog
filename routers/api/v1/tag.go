@@ -260,6 +260,16 @@ func ExportTag(c *gin.Context) {
 	})
 }
 
+// ImportTag 导入标签数据
+// @Summary 导入标签信息
+// @Description 导入 Excel 文件并存储在本地
+// @Tags 标签管理
+// @Accept application/x-www-form-urlencoded
+// @Produce json
+// @Param file formData multipart.File true "文件"
+// @Success 200 {object} map[string]string "导入成功"
+// @Failure 500 {object} app.Response "导入失败"
+// @Router /api/tags/import [post]
 func ImportTag(c *gin.Context) {
 	g := app.Gin{C: c}
 
