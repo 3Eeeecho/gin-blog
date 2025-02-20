@@ -28,7 +28,6 @@ func openLogFile(filePath, fileName string) (*os.File, error) {
 	}
 
 	src := dir + "/" + filePath
-	fmt.Println(src)
 	perm := file.CheckFilePermission(src)
 	//没有权限，返回错误
 	if perm {

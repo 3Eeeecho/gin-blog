@@ -323,14 +323,33 @@ const (
 
 func GenerateArticlePoster(c *gin.Context) {
 	g := app.Gin{C: c}
-	qrc := qrcode.NewQrCode(QRCODE_URL, 300, 300, qr.M, qr.Auto)
-	path := qrcode.GetQrCodePath()
+	article := &article_service.Article{}
+	qr := qrcode.NewQrCode(QRCODE_URL, 300, 300, qr.M, qr.Auto) // 目前写死 gin 系列路径，可自行增加业务逻辑
+	posterName := article_service.GetPosterFlag() + "-" + qrcode.GetQrCodeFileName(qr.URL) + qr.GetQrCodeExt()
+	articlePoster := article_service.NewArticlePoster(posterName, article, qr)
+	articlePosterBgService := article_service.NewArticlePosterBg(
+		"bg.jpg",
+		articlePoster,
+		&article_service.Rect{
+			X0: 0,
+			Y0: 0,
+			X1: 550,
+			Y1: 700,
+		},
+		&article_service.Pt{
+			X: 125,
+			Y: 298,
+		},
+	)
 
-	_, _, err := qrc.Encode(path)
+	_, filePath, err := articlePosterBgService.Generate()
 	if err != nil {
-		g.Response(http.StatusInternalServerError, e.ERROR, nil)
+		g.Response(http.StatusInternalServerError, e.ERROR_GEN_ARTICLE_POSTER_FAIL, nil)
 		return
 	}
 
-	g.Response(http.StatusOK, e.SUCCESS, nil)
+	g.Response(http.StatusOK, e.SUCCESS, map[string]string{
+		"poster_url":      qrcode.GetQrCodeFullUrl(posterName),
+		"poster_save_url": filePath + posterName,
+	})
 }
