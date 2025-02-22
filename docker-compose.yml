@@ -1,0 +1,52 @@
+version: "3.5"
+
+services:
+  # Go 应用
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-gin-app
+    ports:
+      - "8000:8000" # Go 应用映射到主机的 8000 端口
+    volumes:
+      - .:/go/src/go-gin-example
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=mysql://root:root@db:3306/blog
+      - REDIS_URL=redis://redis:6379
+
+  # MySQL 服务
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: blog
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  # Redis 服务
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  # # Nginx 服务
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   ports:
+  #     - "8001:80"
+  #   depends_on:
+  #     - app
+
+volumes:
+  mysql_data:

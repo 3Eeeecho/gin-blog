@@ -70,18 +70,3 @@ require (
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// replace (
-// 	github.com/3Eeeecho/go-gin-example/conf => /go-gin-example/pkg/conf
-// 	github.com/3Eeeecho/go-gin-example/docs => /go-gin-example/docs
-// 	github.com/3Eeeecho/go-gin-example/middleware => /go-gin-example/middleware
-// 	github.com/3Eeeecho/go-gin-example/models => /go-gin-example/models
-// 	github.com/3Eeeecho/go-gin-example/pkg/e => /go-gin-example/pkg/e
-// 	github.com/3Eeeecho/go-gin-example/pkg/logging => /go-gin-example/pkg/logging
-// 	github.com/3Eeeecho/go-gin-example/pkg/setting => /go-gin-example/pkg/setting
-// 	github.com/3Eeeecho/go-gin-example/pkg/util => /go-gin-example/pkg/util
-// 	github.com/3Eeeecho/go-gin-example/routers => /go-gin-example/routers
-// 	github.com/3Eeeecho/go-gin-example/routers/api => /go-gin-example/routers/api
-// 	github.com/3Eeeecho/go-gin-example/runtime => /go-gin-example/runtime
-// 	github.com/3Eeeecho/go-gin-example/service => /go-gin-example/service
-// )
