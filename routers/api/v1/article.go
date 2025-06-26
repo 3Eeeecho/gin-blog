@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/3Eeeecho/go-gin-example/pkg/app"
@@ -29,7 +30,7 @@ import (
 // @Router /api/v1/articles/{id} [get]
 func GetArticle(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
-
+	fmt.Println("ID:", id)
 	g := app.Gin{C: c}
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
@@ -81,7 +82,7 @@ func GetArticles(c *gin.Context) {
 
 	if arg := c.Query("state"); arg != "" {
 		state = com.StrTo(arg).MustInt()
-		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
+		valid.Range(state, 0, 2, "state").Message("状态只允许0或1")
 	}
 
 	var tagId int = -1
@@ -92,7 +93,7 @@ func GetArticles(c *gin.Context) {
 
 	if valid.HasErrors() {
 		app.MakrErrors(valid.Errors)
-		g.Response(http.StatusOK, e.INVALID_PARAMS, nil)
+		g.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
 		return
 	}
 

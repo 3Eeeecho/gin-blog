@@ -1,17 +1,15 @@
 package util
 
 import (
+	"errors"
 	"time"
 
 	"github.com/3Eeeecho/go-gin-example/pkg/setting"
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtSecret = []byte(setting.AppSetting.JwtSecret)
-
 type Claims struct {
 	Username string `json:"username"`
-	Password string `json:"password"`
 	jwt.StandardClaims
 }
 
@@ -20,21 +18,32 @@ func GenerateToken(username, password string) (string, error) {
 	expireTime := nowTime.Add(3 * time.Hour)
 	claims := Claims{
 		username,
-		password,
 		jwt.StandardClaims{
+			IssuedAt:  time.Now().Unix(),
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-blog",
 		},
 	}
 
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(jwtSecret)
+	token, err := tokenClaims.SignedString(getJWTSecret())
 	return token, err
 }
 
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(t *jwt.Token) (interface{}, error) {
-		return jwtSecret, nil
+func ParseToken(tokenStr string) (*Claims, error) {
+	if tokenStr == "" {
+		return nil, errors.New("token cannot be empty")
+	}
+
+	if len(getJWTSecret()) == 0 {
+		return nil, errors.New("JWT secret is not configured")
+	}
+
+	tokenClaims, err := jwt.ParseWithClaims(tokenStr, &Claims{}, func(t *jwt.Token) (any, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("unexpected signing method")
+		}
+		return getJWTSecret(), nil
 	})
 
 	if tokenClaims != nil {
@@ -42,5 +51,10 @@ func ParseToken(token string) (*Claims, error) {
 			return claims, nil
 		}
 	}
+
 	return nil, err
+}
+
+func getJWTSecret() []byte {
+	return []byte(setting.AppSetting.JwtSecret)
 }

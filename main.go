@@ -17,6 +17,7 @@ func main() {
 	logging.SetUp()
 	models.SetUp()
 	gredis.SetUp()
+	defer models.CloseDB()
 
 	router := routers.InitRouter()
 
@@ -42,4 +43,5 @@ func main() {
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		logging.Fatal(fmt.Sprintf("Failed to start server: %v", err))
 	}
+
 }

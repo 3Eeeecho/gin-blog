@@ -14,6 +14,7 @@ type Article struct {
 	CreatedBy  string `json:"created_by"`
 	ModifiedBy string `json:"modified_by"`
 	State      int    `json:"state"`
+	Views      int    `json:"views"`
 }
 
 func ExistArticleByID(id int) (bool, error) {
@@ -76,6 +77,7 @@ func AddArticle(data map[string]interface{}) error {
 		Content:   data["content"].(string),
 		CreatedBy: data["created_by"].(string),
 		State:     data["state"].(int),
+		Views:     data["views"].(int),
 	}
 	if err := db.Create(&article).Error; err != nil {
 		return err

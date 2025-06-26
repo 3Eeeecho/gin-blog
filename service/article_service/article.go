@@ -139,7 +139,7 @@ func (a *Article) GetMaps() map[string]interface{} {
 		maps["state"] = a.State
 	}
 
-	if a.TagID != -1 {
+	if a.TagID != 0 {
 		maps["tag_id"] = a.TagID
 	}
 

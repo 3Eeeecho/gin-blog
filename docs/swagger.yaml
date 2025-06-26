@@ -10,6 +10,63 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/tags/export:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 生成 Excel 文件并返回下载地址
+      parameters:
+      - description: 标签名称（可选）
+        in: formData
+        name: name
+        type: string
+      - description: 标签状态（可选），1=启用，0=禁用
+        in: formData
+        name: state
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 导出成功
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 导出失败
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 导出标签信息
+      tags:
+      - 标签管理
+  /api/tags/import:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 导入 Excel 文件并存储在本地
+      parameters:
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 导入成功
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: 导入失败
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 导入标签信息
+      tags:
+      - 标签管理
   /api/v1/articles:
     get:
       consumes:

@@ -1,6 +1,7 @@
 package setting
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -77,6 +78,8 @@ func SetUp() {
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
+
+	fmt.Println("JwtSecret loaded:", AppSetting.JwtSecret)
 }
 
 func mapTo(section string, v interface{}) {

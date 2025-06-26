@@ -266,7 +266,7 @@ func ExportTag(c *gin.Context) {
 // @Tags 标签管理
 // @Accept application/x-www-form-urlencoded
 // @Produce json
-// @Param file formData multipart.File true "文件"
+// @Param file formData file true "文件"
 // @Success 200 {object} map[string]string "导入成功"
 // @Failure 500 {object} app.Response "导入失败"
 // @Router /api/tags/import [post]

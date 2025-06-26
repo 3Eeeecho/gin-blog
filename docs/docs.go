@@ -15,6 +15,93 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/tags/export": {
+            "post": {
+                "description": "生成 Excel 文件并返回下载地址",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "标签管理"
+                ],
+                "summary": "导出标签信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "标签名称（可选）",
+                        "name": "name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "标签状态（可选），1=启用，0=禁用",
+                        "name": "state",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "导出成功",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "导出失败",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tags/import": {
+            "post": {
+                "description": "导入 Excel 文件并存储在本地",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "标签管理"
+                ],
+                "summary": "导入标签信息",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "文件",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "导入成功",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "导入失败",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/articles": {
             "get": {
                 "description": "根据请求参数（如状态、标签ID）返回文章列表数据和总数",

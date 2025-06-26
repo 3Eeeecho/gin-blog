@@ -23,17 +23,16 @@ type Model struct {
 
 func SetUp() {
 	var (
-		err                                               error
-		dbType, dbName, user, password, host, tablePrefix string
+		err                                  error
+		dbType, dbName, user, password, host string
 	)
 
 	// 读取数据库配置
-	dbType = setting.DatabaseSetting.Type             // 数据库类型（如 mysql）
-	dbName = setting.DatabaseSetting.Name             // 数据库名称
-	user = setting.DatabaseSetting.User               // 数据库用户名
-	password = setting.DatabaseSetting.Password       // 数据库密码
-	host = setting.DatabaseSetting.Host               // 数据库主机地址
-	tablePrefix = setting.DatabaseSetting.TablePrefix // 表前缀
+	dbType = setting.DatabaseSetting.Type       // 数据库类型（如 mysql）
+	dbName = setting.DatabaseSetting.Name       // 数据库名称
+	user = setting.DatabaseSetting.User         // 数据库用户名
+	password = setting.DatabaseSetting.Password // 数据库密码
+	host = setting.DatabaseSetting.Host         // 数据库主机地址
 
 	// 使用 GORM 打开数据库连接
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -49,7 +48,7 @@ func SetUp() {
 	// 设置 GORM 的表名处理函数
 	// 默认表名会加上配置中的表前缀
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return tablePrefix + defaultTableName
+		return defaultTableName
 	}
 
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
@@ -70,7 +69,7 @@ func SetUp() {
 
 // CloseDB 关闭数据库连接
 func CloseDB() {
-	defer db.Close()
+	db.Close()
 }
 
 // updateTimeStampForCreateCallback will set `CreatedOn`, `ModifiedOn` when creating
