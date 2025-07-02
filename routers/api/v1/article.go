@@ -124,13 +124,13 @@ func GetArticles(c *gin.Context) {
 }
 
 type AddArticleForm struct {
-	TagID         int    `form:"tag_id" valid:"Required;Min(1)"`
-	Title         string `form:"title" valid:"Required;MaxSize(100)"`
-	Desc          string `form:"desc" valid:"Required;MaxSize(255)"`
-	Content       string `form:"content" valid:"Required;MaxSize(65535)"`
-	CreatedBy     string `form:"created_by" valid:"Required;MaxSize(100)"`
-	CoverImageUrl string `form:"cover_image_url" valid:"Required;MaxSize(255)"`
-	State         int    `form:"state" valid:"Required;Range(0,1)"`
+	TagID         int    `form:"tag_id" valid:"Min(1)"`
+	Title         string `form:"title" valid:"MaxSize(100)"`
+	Desc          string `form:"desc" valid:"MaxSize(255)"`
+	Content       string `form:"content" valid:"MaxSize(65535)"`
+	CreatedBy     int    `form:"created_by" valid:"Min(1)"`
+	CoverImageUrl string `form:"cover_image_url" valid:"MaxSize(255)"`
+	State         int    `form:"state" valid:"Range(0,1)"`
 }
 
 // AddArticle 新增文章
@@ -190,15 +190,15 @@ func AddArticle(c *gin.Context) {
 	g.Response(http.StatusOK, e.SUCCESS, nil)
 }
 
-type EditArticleForm struct {
+type UpdateArticleForm struct {
 	ID            int    `form:"id" valid:"Required;Min(1)"`
-	TagID         int    `form:"tag_id" valid:"Required;Min(1)"`
-	Title         string `form:"title" valid:"Required;MaxSize(100)"`
-	Desc          string `form:"desc" valid:"Required;MaxSize(255)"`
-	Content       string `form:"content" valid:"Required;MaxSize(65535)"`
-	ModifiedBy    string `form:"modified_by" valid:"Required;MaxSize(100)"`
-	CoverImageUrl string `form:"cover_image_url" valid:"Required;MaxSize(255)"`
-	State         int    `form:"state" valid:"Required;Range(0,1)"`
+	TagID         int    `form:"tag_id" valid:"Min(1)"`
+	Title         string `form:"title" valid:"MaxSize(100)"`
+	Desc          string `form:"desc" valid:"MaxSize(255)"`
+	Content       string `form:"content" valid:"MaxSize(65535)"`
+	ModifiedBy    int    `form:"modified_by" valid:"Min(1)"`
+	CoverImageUrl string `form:"cover_image_url" valid:"MaxSize(255)"`
+	State         int    `form:"state" valid:"Range(0,1)"`
 }
 
 // EditArticle 修改文章
@@ -219,19 +219,20 @@ type EditArticleForm struct {
 // @Failure 404 {object} app.Response "文章不存在"
 // @Failure 500 {object} app.Response "服务器错误"
 // @Router /api/v1/articles/{id} [put]
-func EditArticle(c *gin.Context) {
+func UpdateArticle(c *gin.Context) {
 	var (
-		form = EditArticleForm{ID: com.StrTo(c.Param("id")).MustInt()}
+		form = UpdateArticleForm{ID: com.StrTo(c.Param("id")).MustInt()}
 		g    = app.Gin{C: c}
 	)
 
-	httpCode, errCode := app.BindAndValue(c, form)
+	httpCode, errCode := app.BindAndValue(c, &form)
 	if errCode != e.SUCCESS {
 		g.Response(httpCode, errCode, nil)
 		return
 	}
 
 	articleService := article_service.Article{
+		ID:            form.ID,
 		TagID:         form.TagID,
 		Title:         form.Title,
 		Desc:          form.Desc,
@@ -263,7 +264,7 @@ func EditArticle(c *gin.Context) {
 		return
 	}
 
-	err = articleService.Edit()
+	err = articleService.Update()
 	if err != nil {
 		g.Response(http.StatusInternalServerError, e.ERROR_EDIT_ARTICLE_FAIL, nil)
 		return

@@ -54,9 +54,6 @@ func SetUp() {
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
 	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
 
-	// 设置 GORM 使用单数表名（默认情况下，GORM 会将结构体名称转换为复数形式作为表名）
-	db.SingularTable(true)
-
 	// 开启 GORM 的调试模式，打印所有执行的 SQL 语句
 	db.LogMode(true)
 

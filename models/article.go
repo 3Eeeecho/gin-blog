@@ -11,8 +11,8 @@ type Article struct {
 	Title      string
 	Desc       string `json:"desc"`
 	Content    string `json:"content"`
-	CreatedBy  string `json:"created_by"`
-	ModifiedBy string `json:"modified_by"`
+	CreatedBy  int    `json:"created_by"`
+	ModifiedBy int    `json:"modified_by"`
 	State      int    `json:"state"`
 	Views      int    `json:"views"`
 }
@@ -62,7 +62,7 @@ func GetArticle(id int) (*Article, error) {
 	return &article, nil
 }
 
-func EditArticle(id int, data interface{}) error {
+func UpdateArticle(id int, data interface{}) error {
 	if err := db.Model(&Article{}).Where("id = ?", id).Updates(data).Error; err != nil {
 		return err
 	}
@@ -75,9 +75,9 @@ func AddArticle(data map[string]interface{}) error {
 		Title:     data["title"].(string),
 		Desc:      data["desc"].(string),
 		Content:   data["content"].(string),
-		CreatedBy: data["created_by"].(string),
+		CreatedBy: data["created_by"].(int),
 		State:     data["state"].(int),
-		Views:     data["views"].(int),
+		Views:     0,
 	}
 	if err := db.Create(&article).Error; err != nil {
 		return err

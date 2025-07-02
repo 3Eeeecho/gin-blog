@@ -18,8 +18,8 @@ type Article struct {
 	Content       string
 	CoverImageUrl string
 	State         int
-	CreatedBy     string
-	ModifiedBy    string
+	CreatedBy     int
+	ModifiedBy    int
 
 	PageNum  int
 	PageSize int
@@ -42,16 +42,36 @@ func (a *Article) Add() error {
 	return nil
 }
 
-func (a *Article) Edit() error {
-	return models.EditArticle(a.ID, map[string]interface{}{
-		"tag_id":          a.TagID,
-		"title":           a.Title,
-		"desc":            a.Desc,
-		"content":         a.Content,
-		"cover_image_url": a.CoverImageUrl,
-		"state":           a.State,
-		"modified_by":     a.ModifiedBy,
-	})
+func (a *Article) Update() error {
+	updateData := make(map[string]interface{})
+
+	if a.TagID != 0 {
+		updateData["tag_id"] = a.TagID
+	}
+	if a.Title != "" {
+		updateData["title"] = a.Title
+	}
+	if a.Desc != "" {
+		updateData["desc"] = a.Desc
+	}
+	if a.Content != "" {
+		updateData["content"] = a.Content
+	}
+	if a.CoverImageUrl != "" {
+		updateData["cover_image_url"] = a.CoverImageUrl
+	}
+	if a.State != 0 {
+		updateData["state"] = a.State
+	}
+	if a.ModifiedBy != 0 {
+		updateData["modified_by"] = a.ModifiedBy
+	}
+
+	if len(updateData) == 0 {
+		return nil // 没有需要更新的字段
+	}
+
+	return models.UpdateArticle(a.ID, updateData)
 }
 
 func (a *Article) Get() (*models.Article, error) {
